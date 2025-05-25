@@ -42,6 +42,9 @@ class Ships:
             for ship_cell in ship.get_coordinates_of_ship():
                 if ship_cell == cell:
                     return ship
+                return None
+            return None
+        return None
 
     @staticmethod
     def generate_randomly_start_cell(available_cells):

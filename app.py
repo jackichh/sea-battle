@@ -280,3 +280,117 @@ class App:
         board.create_rectangle(((start_pos[0]) * 50, (start_pos[1]) * 50),
                                ((end_pos[0] + 1) * 50,
                                 (end_pos[1] + 1) * 50), width=5)
+
+#
+# def __get_cells_around_hit(self, cell):
+#     """Returns the four adjacent cells (up, down, left, right) around a hit cell."""
+#     x, y = cell
+#     return {(x + 1, y), (x, y + 1), (x - 1, y), (x, y - 1)}
+#
+#
+# def __filter_valid_cells(self, cells):
+#     """Filters a set of cells to only include valid cells that haven't been shot at yet."""
+#     valid_cells = set()
+#     for cell in cells:
+#         x, y = cell
+#         if (0 <= x <= 9 and 0 <= y <= 9 and
+#                 cell in self.__player_ships.get_all_possible_cells()):
+#             valid_cells.add(cell)
+#     return valid_cells
+#
+#
+# def __when_released(self, event):
+#     if not self.PLAYERS_TURN:
+#         time.sleep(0.5)
+#         if self.__player_ships.there_are_alive_ships():
+#             # Choose target cell based on AI strategy
+#             if self.__in_attack:
+#                 # We're in "hunt" mode - we've hit a ship and are trying to sink it
+#                 if self.__first_hit == ():
+#                     # This is our first hit on this ship
+#                     self.__first_hit = self.__there_was_a_hit[1]
+#
+#                 # Get all cells adjacent to our last hit
+#                 hit_cell = self.__there_was_a_hit[1]
+#                 cells_around_hit = self.__get_cells_around_hit(hit_cell)
+#                 valid_targets = self.__filter_valid_cells(cells_around_hit)
+#
+#                 if valid_targets:
+#                     # If we have multiple hits in a row, prioritize cells in that direction
+#                     if self.__there_was_a_hit[2].get_length() - self.__there_was_a_hit[2].get_health_points() >= 2:
+#                         # We have at least 2 hits on the same ship, so we know its orientation
+#                         first_hit = self.__first_hit
+#                         last_hit = self.__there_was_a_hit[1]
+#
+#                         # Determine if ship is horizontal or vertical
+#                         if first_hit[0] == last_hit[0]:  # Horizontal
+#                             # Try to extend in the same direction
+#                             min_y = min(first_hit[1], last_hit[1])
+#                             max_y = max(first_hit[1], last_hit[1])
+#                             potential_targets = {(first_hit[0], min_y - 1), (first_hit[0], max_y + 1)}
+#                             aligned_targets = self.__filter_valid_cells(potential_targets)
+#                             if aligned_targets:
+#                                 valid_targets = aligned_targets
+#                         else:  # Vertical
+#                             # Try to extend in the same direction
+#                             min_x = min(first_hit[0], last_hit[0])
+#                             max_x = max(first_hit[0], last_hit[0])
+#                             potential_targets = {(min_x - 1, first_hit[1]), (max_x + 1, first_hit[1])}
+#                             aligned_targets = self.__filter_valid_cells(potential_targets)
+#                             if aligned_targets:
+#                                 valid_targets = aligned_targets
+#
+#                     # Choose a random cell from our valid targets
+#                     x, y = random.choice(tuple(valid_targets))
+#                 else:
+#                     # No valid adjacent cells, revert to random targeting
+#                     x, y = random.choice(tuple(self.__player_ships.get_all_possible_cells()))
+#             else:
+#                 # We're in "seek" mode - randomly searching for ships
+#                 x, y = random.choice(tuple(self.__player_ships.get_all_possible_cells()))
+#
+#             # Process the shot
+#             if (x, y) in self.__player_ships.get_all_possible_cells():
+#                 if (x, y) in self.__player_ships.get_cells_all_ships_occupy_set():
+#                     # Hit
+#                     self.__in_attack = True
+#                     self.__player_board.create_rectangle((x * 50, y * 50), ((x + 1) * 50, (y + 1) * 50), 'gray')
+#                     self.__player_board.create_cross((x, y))
+#
+#                     ship = self.__player_ships.detect_ship_by_cell((x, y))
+#                     print(ship)
+#                     ship.been_shot((x, y))
+#                     self.__there_was_a_hit = True, (x, y), ship
+#
+#                     if ship.is_dead():
+#                         # Ship is sunk, reset targeting variables
+#                         self.__in_attack = False
+#                         self.__first_hit = ()
+#                         print(ship, 'is dead')
+#                         App.__draw_and_remove_dead_ship_area(self.__player_ships, ship, self.__player_board)
+#                         self.__player_ships.delete_ship_from_ship_list(ship)
+#                         print(len(self.__player_ships))
+#                         if len(self.__player_ships) == 0:
+#                             messagebox.showinfo(title='Game over', message='You have lost(((')
+#                             self.__window.destroy()
+#                     else:
+#                         self.__player_ships.remove_cell_from_possible_cells((x, y))
+#
+#                     # Computer gets another turn after a hit
+#                     self.__when_released(event)
+#                 else:
+#                     # Miss
+#                     self.PLAYERS_TURN = True
+#                     if not self.__in_attack:
+#                         self.__there_was_a_hit = False, (x, y), Ship()
+#                     self.__player_board.create_dot((x, y))
+#                     self.__player_ships.remove_cell_from_possible_cells((x, y))
+#
+#                 print(x, y)
+#                 print('computer shoots\n')
+#             else:
+#                 pass
+#         else:
+#             print('player has no ships')
+#     else:
+#         pass
